@@ -11,7 +11,10 @@ class IlluminationHandler(BaseHTTPRequestHandler):
     board = pingo.detect.MyBoard()
     if board is None:
         board = pingo.ghost.GhostBoard()
-    pin = board.pins[23]
+        pin = board.pins[8]
+    else:
+        pin = board.pins[23]
+
     pin.mode = pingo.OUT
     pin.lo()
     template = Template(open("status.html", "r").read())
@@ -21,6 +24,10 @@ class IlluminationHandler(BaseHTTPRequestHandler):
             return "an"
         else:
             return "aus"
+
+    def address_string(self):
+        host, port = self.client_address[:2]
+        return "" + host + port
 
     def respond_status(self):
         self.send_response(200)
