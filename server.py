@@ -11,7 +11,7 @@ class IlluminationHandler(BaseHTTPRequestHandler):
     board = pingo.detect.MyBoard()
     if board is None:
         board = pingo.ghost.GhostBoard()
-    pin = board.pins[8]
+    pin = board.pins[23]
     pin.mode = pingo.OUT
     pin.lo()
     template = Template(open("status.html", "r").read())
