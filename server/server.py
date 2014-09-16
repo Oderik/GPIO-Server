@@ -5,7 +5,6 @@ import cgi
 
 import pingo
 
-
 class IlluminationHandler(BaseHTTPRequestHandler):
     print "Initializing"
     board = pingo.detect.MyBoard()
@@ -17,7 +16,9 @@ class IlluminationHandler(BaseHTTPRequestHandler):
 
     pin.mode = pingo.OUT
     pin.lo()
-    template = Template(open("status.html", "r").read())
+    template_file = open("status.html", "r")
+    template = Template(template_file.read())
+    template_file.close()
 
     def format_light_status(self):
         if self.pin.state == pingo.HIGH:
