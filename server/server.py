@@ -2,8 +2,10 @@ from BaseHTTPServer import BaseHTTPRequestHandler
 import SocketServer
 from string import Template
 import cgi
+from daemonize import Daemonize
 
 import pingo
+import sys
 
 class IlluminationHandler(BaseHTTPRequestHandler):
     print "Initializing"
@@ -72,15 +74,27 @@ class IlluminationHandler(BaseHTTPRequestHandler):
             pin.lo()
 
 
-def main():
+def run_server():
     server = SocketServer.TCPServer(("", 8081), IlluminationHandler)
-
     try:
         print('Server started.')
         server.serve_forever()
     except KeyboardInterrupt:
         print('Shutting down.')
         server.socket.close()
+
+
+def main():
+    daemon_mode = False
+    for arg in sys.argv:
+        if "--daemon" == arg:
+            daemon_mode = True
+
+    if daemon_mode:
+        daemon = Daemonize(app="light", pid="/var/run/gpioserver.pid", action="run_server")
+        daemon.start()
+    else:
+        run_server()
 
 
 if __name__ == '__main__':
