@@ -1,11 +1,11 @@
-from BaseHTTPServer import BaseHTTPRequestHandler
+from SimpleHTTPServer import SimpleHTTPRequestHandler
 import SocketServer
 from string import Template
 import cgi
 
 import pingo
 
-class IlluminationHandler(BaseHTTPRequestHandler):
+class IlluminationHandler(SimpleHTTPRequestHandler):
     print "Initializing"
     board = pingo.detect.MyBoard()
     if board is None:
@@ -38,14 +38,14 @@ class IlluminationHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
-            if self.path.endswith("toggle"):
-                self.toggle_light()
-            if not self.path.endswith("favicon.ico"):
+            path = self.path
+            # TODO more sophisticated way to decide whether to use super implementation
+            if path.endswith("status.html") or path.endswith("/"):
                 self.respond_status()
-            else:
-                self.send_response(200, "OK")
+                return
         except IOError:
             self.send_error(404, 'File Not Found')
+        return SimpleHTTPRequestHandler.do_GET(self)
 
 
     def do_POST(self):
