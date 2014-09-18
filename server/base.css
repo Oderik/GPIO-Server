@@ -1,6 +1,8 @@
 body {
-    font-size: 1cm;
+    font-size: 8mm;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
+    text-align: center;
+
 }
 
 input, button, select, option, textarea {
@@ -12,8 +14,4 @@ input, button {
     min-height: 3cm;
     min-width: 3cm;
     padding: .5cm;
-}
-
-* {
-margin: 2mm;
 }

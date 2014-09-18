@@ -3,13 +3,19 @@
 <head lang="de">
     <meta charset="UTF-8">
     <title>Roboterlicht</title>
-    <link rel="stylesheet" type="text/css" href="/base.css">
+    <link rel="stylesheet" type="text/css" href="base.css">
+    <meta name="viewport"
+            content="width=device-width, height=device-height"/>
+
 </head>
 <body>
-<p>Das Licht ist ${led_status}.</p>
-<form method="post" name="toggle">
-    <input type="hidden" name="action" value="toggle"/>
-    <input type="submit" value="Umschalten"/>
-</form>
+<div class="content">
+    <p>Das Licht ist ${led_status}.</p>
+
+    <form method="post" name="toggle">
+        <input type="hidden" name="action" value="toggle"/>
+        <input type="submit" value="Umschalten"/>
+    </form>
+</div>
 </body>
 </html>
