@@ -28,8 +28,7 @@ class IlluminationHandler(SimpleHTTPRequestHandler):
             return "aus"
 
     def address_string(self):
-        host, port = self.client_address[:2]
-        return "" + host + port
+        return self.client_address
 
     def respond_status(self):
         self.send_response(200)
