@@ -39,12 +39,15 @@ class IlluminationHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         try:
             path = self.path
-            # TODO more sophisticated way to decide whether to use super implementation
+            # TODO this must all be more sophisticated
+            if path.endswith("py"):
+                self.send_error(403)
+                return
             if path.endswith("status.html") or path.endswith("/"):
                 self.respond_status()
                 return
         except IOError:
-            self.send_error(404, 'File Not Found')
+            self.send_error(404)
         return SimpleHTTPRequestHandler.do_GET(self)
 
 
