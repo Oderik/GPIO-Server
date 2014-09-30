@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 import SocketServer
 from string import Template
