@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# !/usr/bin/env python
 
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 import SocketServer
@@ -6,25 +6,17 @@ from string import Template
 import cgi
 from urlparse import urlparse
 
-import pingo
+from light import Light
+
 
 class IlluminationHandler(SimpleHTTPRequestHandler):
-    print "Initializing"
-    board = pingo.detect.MyBoard()
-    if board is None:
-        board = pingo.ghost.GhostBoard()
-        pin = board.pins[8]
-    else:
-        pin = board.pins[23]
+    light = Light()
 
-    pin.mode = pingo.OUT
-    pin.lo()
-    template_file = open("status.html", "r")
-    template = Template(template_file.read())
-    template_file.close()
+    with open("status.html", "r") as template_file:
+        template = Template(template_file.read())
 
     def format_light_status(self):
-        if self.pin.state == pingo.HIGH:
+        if IlluminationHandler.light.state():
             return "an"
         else:
             return "aus"
@@ -36,7 +28,7 @@ class IlluminationHandler(SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        self.wfile.write(self.template.safe_substitute(dict(led_status=self.format_light_status())))
+        self.wfile.write(IlluminationHandler.template.safe_substitute(dict(led_status=self.format_light_status())))
 
     def do_GET(self):
         try:
@@ -61,19 +53,11 @@ class IlluminationHandler(SimpleHTTPRequestHandler):
                          'CONTENT_TYPE': self.headers['Content-Type'],
                 })
             if form.getvalue("action") == "toggle":
-                self.toggle_light()
+                IlluminationHandler.light.toggle()
 
             self.respond_status()
         except IOError:
             self.send_error(500, 'There went what not')
-
-
-    def toggle_light(self):
-        pin = self.pin
-        if pin.state == pingo.LOW:
-            pin.hi()
-        else:
-            pin.lo()
 
 
 def main():
